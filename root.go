@@ -41,9 +41,14 @@ func newRootCmd(out io.Writer, args []string) (*cobra.Command, error) {
 		return nil, err
 	}
 
-    os.Chdir(root.Path)
+    cctx.currentPath, err = os.Getwd()
+	if err != nil {
+		return nil, err
+	}
 
-	cfg, err := jsondb.Open[Config](filepath.Join(root.Path, ".gitlinks"))
+    cctx.rootPath = root.Path
+
+	cfg, err := jsondb.Open[Config](filepath.Join(cctx.rootPath, ".gitlinks"))
 	if err != nil {
 		return nil, err
 	}
