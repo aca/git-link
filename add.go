@@ -22,7 +22,7 @@ func newAddCmd(cctx *cmdContext) *cobra.Command {
 			destination := args[0]
 			source := filepath.Base(destination)
 
-            log.Printf("Calculing hash of %q", destination)
+			log.Printf("Calculing hash of %q", destination)
 			h := xxhash.New()
 			f, err := os.Open(destination)
 			if err != nil {
@@ -44,8 +44,13 @@ func newAddCmd(cctx *cmdContext) *cobra.Command {
 				}
 			}()
 
+			relpath, err := filepath.Rel(cctx.rootPath, filepath.Join(cctx.currentPath, source))
+			if err != nil {
+				return err
+			}
+
 			cfg.Data.Links = append(cfg.Data.Links, Link{
-				Source:      source,
+				Source:      relpath,
 				Destination: args[0],
 				XXH64:       fmt.Sprintf("%016x", h.Sum64()),
 			})

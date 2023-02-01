@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 
 	xxhash "github.com/cespare/xxhash/v2"
 	"github.com/google/go-cmp/cmp"
@@ -18,9 +19,14 @@ func newFSCKCommand(cctx *cmdContext) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cfg := cctx.db
 
+			targetFile, err := filepath.Rel(cctx.rootPath, filepath.Join(cctx.currentPath, args[0]))
+			if err != nil {
+				return err
+			}
+
 			found := false
 			for _, link := range cfg.Data.Links {
-				if link.Source == args[0] {
+				if link.Source == targetFile {
 					found = true
 
 					destination := link.Destination
@@ -38,6 +44,7 @@ func newFSCKCommand(cctx *cmdContext) *cobra.Command {
 
 					diffString := cmp.Diff(hashString, link.XXH64)
 					if diffString == "" {
+						log.Printf("%q OK\n", link.Source)
 						return nil
 					} else {
 						return fmt.Errorf("checksum mismatched for %q, %s", link.Source, diffString)
@@ -46,7 +53,7 @@ func newFSCKCommand(cctx *cmdContext) *cobra.Command {
 			}
 
 			if !found {
-				return fmt.Errorf("%q not found", args[0])
+				return fmt.Errorf("%q not found", targetFile)
 			}
 
 			return nil

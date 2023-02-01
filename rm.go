@@ -1,7 +1,8 @@
 package main
 
 import (
-	"github.com/samber/lo"
+	"path/filepath"
+
 	"github.com/spf13/cobra"
 )
 
@@ -12,11 +13,22 @@ func newRMCommand(cctx *cmdContext) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cfg := cctx.db
 
-            cfg.Data.Links = lo.Filter(cfg.Data.Links, func(l Link, _ int) bool {
-                return l.Source == args[0]
-            })
+			targetFile := args[0]
 
-            return cfg.Save()
+			relpath, err := filepath.Rel(cctx.rootPath, filepath.Join(cctx.currentPath, targetFile))
+			_ = relpath
+			if err != nil {
+				return err
+			}
+
+			// cfg.Data.Links = lo.Filter(cfg.Data.Links, func(l Link, _ int) bool {
+			//              if l.Source == relpath {
+			//                  log.Printf("removed %q", targetFile)
+			//              }
+			// 	return l.Source != relpath
+			// })
+
+			return cfg.Save()
 		},
 	}
 	return cmd

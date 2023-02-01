@@ -13,6 +13,7 @@ type Link struct {
 const version = "v0"
 
 func main() {
+    log.SetPrefix("[git-link] ")
 	err := cmdMain()
 	if err != nil {
 		log.Fatal(err)
