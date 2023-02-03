@@ -16,3 +16,8 @@ git-link is my attempt to replace git-annex.
     $ git link fsck large.mp4 # verify checksum of the file, uses XXH64
 
     $ git link rm large.mp4
+
+## Alternatives
+
+- https://github.com/rfjakob/cshatag/
+- https://git-annex.branchable.com/
