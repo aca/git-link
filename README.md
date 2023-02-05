@@ -2,7 +2,9 @@
 
 I wanted to manage files in my storages with git.
 git-annex is most common choice for doing this stuff but it was too complex and heavy.
-git-link is my attempt to replace git-annex.
+git-link is my attempt to replace git-annex. It just creates symbolic link to the file, store metadata for it.
+
+[Special remotes](https://git-annex.branchable.com/special_remotes/)? Why not just use [FUSE](https://www.kernel.org/doc/html/latest/filesystems/fuse.html) instead, and mount it if needed.
 
     $ git init
     $ git link add /mnt/nas/large.mp4
