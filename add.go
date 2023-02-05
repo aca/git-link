@@ -24,15 +24,8 @@ func newAddCmd(cctx *cmdContext) *cobra.Command {
 
 			log.Printf("Calculing hash of %q", destination)
 			h := xxhash.New()
-			f, err := os.Open(destination)
-			if err != nil {
-				return err
-			}
-			if _, err := io.Copy(h, f); err != nil {
-				return err
-			}
 
-			err = os.Symlink(destination, source)
+            err := os.Symlink(destination, source)
 			if err != nil {
 				return err
 			}
@@ -44,7 +37,20 @@ func newAddCmd(cctx *cmdContext) *cobra.Command {
 				}
 			}()
 
+			f, err := os.Open(destination)
+			if err != nil {
+				return err
+			}
+			if _, err := io.Copy(h, f); err != nil {
+				return err
+			}
+
 			relpath, err := filepath.Rel(cctx.rootPath, filepath.Join(cctx.currentPath, source))
+			if err != nil {
+				return err
+			}
+
+			stat, err := f.Stat()
 			if err != nil {
 				return err
 			}
@@ -53,6 +59,7 @@ func newAddCmd(cctx *cmdContext) *cobra.Command {
 				Source:      relpath,
 				Destination: args[0],
 				XXH64:       fmt.Sprintf("%016x", h.Sum64()),
+			    Size: stat.Size(),
 			})
 
 			err = cfg.Save()
