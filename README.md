@@ -9,8 +9,6 @@ git-link is my attempt to replace git-annex.
 
     $ ls 
     large.mp4 -> /mnt/nas/large.mp4
-    .gitlinks
-    .git
 
     $ git link fsck large.mp4 # verify checksum of the file, uses XXH64
 
