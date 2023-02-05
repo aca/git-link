@@ -4,7 +4,6 @@ I wanted to manage files in my storages with git.
 git-annex is most common choice for doing this stuff but it was too complex and heavy.
 git-link is my attempt to replace git-annex.
 
-
     $ git init
     $ git link add /mnt/nas/large.mp4
 
@@ -16,6 +15,11 @@ git-link is my attempt to replace git-annex.
     $ git link fsck large.mp4 # verify checksum of the file, uses XXH64
 
     $ git link rm large.mp4
+
+    $ git link dump /mnt/nas /mnt
+    $ ls
+    nas/xxx/large.dump -> /mnt/nas/xxx/large.dump
+    nas/xxx/large2.dump -> /mnt/nas/xxx/large2.dump
 
 ## Alternatives
 
