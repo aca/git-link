@@ -1,6 +1,6 @@
 package main
 
 type Config struct {
-	Version string
-	Links   []Link
+	Version string `json:"version"`
+	Links   []Link `json:"links"`
 }

@@ -5,10 +5,10 @@ import (
 )
 
 type Link struct {
-	Source      string
-	Destination string
-	Size        int64
-	XXH64       string
+	Source      string `json:"source"`
+	Destination string `json:"destination"`
+	Size        int64  `json:"size"`
+	XXH64       string `json:"xxh_64"`
 }
 
 const version = "v0"

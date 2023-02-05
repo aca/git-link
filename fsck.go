@@ -59,5 +59,9 @@ func newFSCKCommand(cctx *cmdContext) *cobra.Command {
 			return nil
 		},
 	}
+
+	// var sizeOnly bool
+	// f := cmd.Flags()
+	// f.BoolVar(&sizeOnly, "size-only", false, "")
 	return cmd
 }
