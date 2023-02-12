@@ -78,8 +78,8 @@ func newAddCmd(cctx *cmdContext) *cobra.Command {
 
 			hashv := fmt.Sprintf("%016x", h.Sum64())
 
-			if hashv != "" {
-				return fmt.Errorf("failed to get hash value")
+			if hashv == "" {
+				return fmt.Errorf("invalid hash value: %v", hashv)
 			}
 
 			cfg.Data.Links = append(cfg.Data.Links, Link{

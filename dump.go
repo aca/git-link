@@ -41,6 +41,11 @@ func newDumpCmd(cctx *cmdContext) *cobra.Command {
 					return nil
 				}
 
+				if !d.Type().IsRegular() {
+					log.Printf("skip %q", path)
+					return nil
+				}
+
 				addcmd := []string{"git", "link", "add", path, destination}
 				log.Println(addcmd)
 				cmd := exec.Command(addcmd[0], addcmd[1:]...)

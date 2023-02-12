@@ -47,6 +47,7 @@ func newRootCmd(out io.Writer, args []string) (*cobra.Command, error) {
 	}
 
 	cctx.rootPath = root.Path
+	log.Println("reading configuration")
 
 	cfg, err := jsondb.Open[Config](filepath.Join(cctx.rootPath, ".gitlinks"))
 	if err != nil {
@@ -55,6 +56,22 @@ func newRootCmd(out io.Writer, args []string) (*cobra.Command, error) {
 
 	if cfg.Data.Version == "" {
 		cfg.Data.Version = version
+	}
+
+	log.Println("validating configuration")
+	links := cfg.Data.Links[:0]
+	for _, l := range cfg.Data.Links {
+		if l.XXH64 != "" {
+			links = append(links, l)
+		} else {
+			log.Printf("invalid empty hash, rm %v", l.Source)
+		}
+	}
+
+	cfg.Data.Links = links
+	err = cfg.Save()
+	if err != nil {
+		log.Fatal("failed to save")
 	}
 
 	cctx.db = cfg
